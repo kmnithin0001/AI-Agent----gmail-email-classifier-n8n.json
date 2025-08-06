@@ -1,0 +1,252 @@
+{
+  "name": "Gmail",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "b2f96408-0eed-47d9-9167-25b51deee282",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K3Ip9jzMXu3aeitz",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "inputText": "={{ $json.text }}",
+        "categories": {
+          "categories": [
+            {
+              "category": "High priority",
+              "description": "Emails requiring immediate attention or action, typically from key stakeholders, clients, or decision-makers. These emails often contain time-sensitive requests, deadlines, or escalated  issues. Keywords: urgent, ASAP, immediate, deadline, action required, high priority"
+            },
+            {
+              "category": "Customer Support",
+              "description": "Emails related to ongoing communication with current clients or customers, including service requests, feedback, support tickets, and inquiries. Keywords: request, inquiry, support, question, follow-up, feedback"
+            },
+            {
+              "category": "promotion",
+              "description": "Emails related to advertising, marketing offers, newsletters, product announcements, event invites, or sales campaigns. Keywords:offer, discount, limited time, promotion, newsletter, exclusive deal, invite, free, campaign, launch"
+            },
+            {
+              "category": "finance/billing",
+              "description": "Emails related to invoices, payments, refunds, billing discrepancies, receipts, or finance-related queries.Keywords: invoice, payment, billing, receipt, transaction, refund, credit, debit, amount due, bank, tax, GST"
+            }
+          ]
+        },
+        "options": {
+          "systemPromptTemplate": "Please classify the text provided by the user into one of the following categories: {categories}, and use the provided formatting instructions below. Don't explain, and only output the json."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.textClassifier",
+      "typeVersion": 1.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "fa221cef-6df0-4fc7-984c-0ed7a0b07123",
+      "name": "Text Classifier"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        144,
+        208
+      ],
+      "id": "0e515741-5a82-46c0-88cb-88fab6d177a2",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "9mPIGnjHAxRB2L5Q",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_5800525639594279573"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "d3872848-0b24-444b-8f1f-26581584202e",
+      "name": "Customer Support",
+      "webhookId": "5b80d00e-e7f4-4413-b7d2-84981d7c298c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K3Ip9jzMXu3aeitz",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_7112738738800963306"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        608,
+        112
+      ],
+      "id": "38783fcb-15b8-4ffe-8b70-20a1654bd227",
+      "name": "promotions",
+      "webhookId": "5b80d00e-e7f4-4413-b7d2-84981d7c298c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K3Ip9jzMXu3aeitz",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_3685879380035625905"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        240
+      ],
+      "id": "b54caa95-5a86-4778-8464-b3ae7b37f4ab",
+      "name": "Finance/billing",
+      "webhookId": "5b80d00e-e7f4-4413-b7d2-84981d7c298c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K3Ip9jzMXu3aeitz",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "addLabels",
+        "messageId": "={{ $json.id }}",
+        "labelIds": [
+          "Label_6854850102328369547"
+        ]
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        -144
+      ],
+      "id": "ba9e2e36-0a13-4c3d-bff9-20dccb98c79f",
+      "name": "High priority",
+      "webhookId": "5b80d00e-e7f4-4413-b7d2-84981d7c298c",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "K3Ip9jzMXu3aeitz",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Text Classifier",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Text Classifier": {
+      "main": [
+        [
+          {
+            "node": "High priority",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Customer Support",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "promotions",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Finance/billing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "d7b4fe12-00ba-44cb-8475-10f59fad03a1",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "b9ed9c82bc9b1dc5a334b9361d9134ce4b79e13f2dedcb8ddd84c606589731b5"
+  },
+  "id": "RMQhiwE0hR9BQQNx",
+  "tags": []
+}
